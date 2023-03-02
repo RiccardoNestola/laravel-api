@@ -27,6 +27,12 @@
             <p>{{$project->year}}</p>
             <h4>Tipo</h4>
             <p>{{$project->type->name}}</p>
+            <h4>Tecnologia</h4>
+             @forelse ($project->technologies as $technology)
+                        <p>{{ $technology->name }}</p>
+                      @empty
+                       <p>Nessuna tecnologia selezionata</p> 
+                      @endforelse
             <h4>Data Progetto</h4>
             <p>{{$project->date_added}}</p>
             <p class="fw-bold">ID:{{$project->id}}</p>

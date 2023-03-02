@@ -23,7 +23,7 @@ class ProjectController extends Controller
         'thumb' => 'required|image',
         'date_added' => 'required|string|min:2|max:200',
         'type_id' => 'required|exists:types,id',
-        'technologies' => 'array|exists:technologys,id'
+        'technologies' => 'array|exists:technologies,id'
 
     ];
 
@@ -88,13 +88,18 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         /* dd($request->all()); */
-        $formData = $request->all();
-        $request->validate($this->rules, $this->messages);
+         /* $request->all(); */
+        $formData = $request->validate($this->rules, $this->messages);
+        $formData['thumb'] = Storage::put('uploads', $formData["thumb"]);
+       /*  dd($formData); */
         $newProject = new Project();
         $newProject->fill($formData);
-        $newProject -> thumb = Storage::put('uploads', $formData["thumb"]);
+        
 
         $newProject->save();
+       
+        $newProject->technologies()->sync($formData['technologies'] ?? [] );
+        /* dd($newProject); */
 
         return redirect()->route("admin.projects.show", $newProject->id);
     }
@@ -147,6 +152,7 @@ class ProjectController extends Controller
 
         $formData["thumb"] = Storage::put('uploads', $formData["thumb"]);
         $project->update($formData);
+        $project->technologies()->sync($formData['technologies'] ?? []);
 
         return redirect()->route('admin.projects.show', compact('project'));
     }

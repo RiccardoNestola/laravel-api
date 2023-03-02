@@ -52,7 +52,7 @@
                       @forelse ($project->technologies as $technology)
                         {{ $technology->name }},
                       @empty
-                        No technologies
+                       Nessuna tecnologia selezionata
                       @endforelse
                     </td>
                     {{-- <td class="d-none d-md-table-cell">
